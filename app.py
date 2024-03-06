@@ -13,8 +13,8 @@ CORS(app)
 client = OpenAI()
 
 #prompt paths
-file_path1 = "/home/acneai/flaskbackend/prompt_preface.txt"
-file_path2 = "/home/acneai/flaskbackend/prompt_body.txt"
+file_path1 = "prompt_preface.txt"
+file_path2 = "prompt_body.txt"
 
 #function to generate filenames based on timestamp
 def generate_filename():
@@ -38,7 +38,7 @@ def upload_image():
 
     # Add additional checks if needed (e.g., file extension, file size)
 
-    image_path = f"/home/acneai/flaskbackend/uploads/{generate_filename()}"
+    image_path = f"uploads/{generate_filename()}"
     #image_path = f"/uploads/{generate_filename()}"
     image.save(image_path)
 

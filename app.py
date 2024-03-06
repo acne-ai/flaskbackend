@@ -1,8 +1,9 @@
-from flask import Flask, request, render_template, send_file, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from datetime import datetime
 from openai import OpenAI
 import json
+import os
 
 app = Flask(__name__)
 
@@ -15,6 +16,8 @@ client = OpenAI()
 #prompt paths
 file_path1 = "/home/acneai/flaskbackend/prompt_preface.txt"
 file_path2 = "/home/acneai/flaskbackend/prompt_body.txt"
+#file_path1 = "prompt_preface.txt"
+#file_path2 = "prompt_body.txt"
 
 #function to generate filenames based on timestamp
 def generate_filename():
@@ -42,7 +45,7 @@ def upload_image():
     #image_path = f"/uploads/{generate_filename()}"
     image.save(image_path)
 
-    #INSERT MACHINE LEARNING HERE
+    # #INSERT MACHINE LEARNING HERE
     acne_type = "papulosapustulosa"
 
     #OPEN AI INTGRATION
@@ -74,6 +77,24 @@ def upload_image():
             cleaned_data = cleaned_data[json_start_index:]
         json_data = json.loads(cleaned_data)
 
+    json_data["classification"] = acne_type
+    json_data["result_path"] = image_path.replace('/uploads/', '/processed/')
+
     print(json_data)
 
     return json_data
+
+
+@app.route('/api/get_image', methods=['GET'])
+def get_image():
+    # Get the file path from the request parameters
+    file_path = request.args.get('file_path')
+    absolute_path = os.path.abspath(os.path.join("\\home\\acneai\\flaskbackend", file_path))
+    #absolute_path = os.path.abspath(os.path.join("C:\\Users\\dbatr\\OneDrive\\Documents\\aicne", file_path))
+
+    try:
+        # Use Flask's send_file function to send the image file
+        return send_file(absolute_path)
+    except Exception as e:
+        # Handle any potential exceptions, e.g., file not found
+        return f"Error: {str(e)}", 404

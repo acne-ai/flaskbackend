@@ -89,12 +89,14 @@ def upload_image():
 def get_image():
     # Get the file path from the request parameters
     file_path = request.args.get('file_path')
-    absolute_path = os.path.abspath(os.path.join("\\home\\acneai\\flaskbackend", file_path))
-    #absolute_path = os.path.abspath(os.path.join("C:\\Users\\dbatr\\OneDrive\\Documents\\aicne", file_path))
+
+    # Check if file_path is None
+    if file_path is None:
+        return "Error: File path is missing in the request", 400
 
     try:
         # Use Flask's send_file function to send the image file
-        return send_file(absolute_path)
+        return send_file(file_path)
     except Exception as e:
         # Handle any potential exceptions, e.g., file not found
         return f"Error: {str(e)}", 404

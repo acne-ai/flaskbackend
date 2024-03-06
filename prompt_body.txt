@@ -1,0 +1,32 @@
+Could you please tell me the following information?
+Identify what type acne the patient has and explain what characterizes this type of acne?
+Identify treatment options for the patient's acne, what each treatment is used for, and any nuances or complexities in treatment. Treatment options should include listing over the counter medicines and home remedies, what they are used for, and the impact they would have. Do not list any prescription medication. If you feel anything prescription strength is necessary then recommend visiting a dermatologist and explain why.
+What are some general skincare or cleanliness tips that could help with this form of acne? If using any domain specific vocabulary not in the average lexicon, please provide appropriate context. Do not repeat any suggestions that already provided in question 2.
+What are some potential causes or triggers of the acne that the patient has and provide details on how each cause is relavent?
+Are there any lifestyle factors, such as stress levels, dietary habits, or sleep patterns that were not already explained in question 4, that could be influencing the acne and explain how? Do NOT repeat information provided in your answer for question 4.
+
+
+Please make your response into a json and remember answers for questions 2-5 should be separated by bullets and have 3-5 bullets unless that would cause repetition
+
+Example (continue same format for q3, q4, and q5): 
+{
+  "q1": {
+    "prompt": "Identify what type of acne the patient has and explain what characterizes this type of acne?",
+    "patient_data": "THIS IS WHERE THE EXACT PATIENT DATA YOU EXTRACT GOES",
+    "context": "THIS IS WHERE YOUR UNDERSTANDING OF THE PATIENT'S SITUATION/HOW THE PATIENT GOT INTO THIS SITUATION GOES",
+    "thoughts": "THIS IS WHERE YOU GENERATE FURTHER ANALYSIS OF THE PATIENT'S SITUATION BASED ON CONTEXT AND PATIENT_DATA",
+    "reasoning": "THIS IS WHERE YOU GENERATE REASONING TO YOUR THOUGHTS/ANALYSIS",
+    "answer": "AFTER GENERATING EVERYTHING ELSE, YOUR ANSWER GOES HERE."
+  },
+  "q2": {
+    "prompt": "Identify treatment options for such acne of the patient, and any nuances or complexities in treatment. Treatment options should include listing over the counter medicines and home remedies and the impact they would have. Do not list any prescription medication. If you feel anything prescription strength is necessary then recommend visiting a dermatologist and explain why.",
+    "patient_data": "THIS IS WHERE THE EXACT PATIENT DATA YOU EXTRACT GOES",
+    "context": "THIS IS WHERE YOUR UNDERSTANDING OF THE PATIENT'S SITUATION/HOW THE PATIENT GOT INTO THIS SITUATION GOES",
+    "thoughts": "THIS IS WHERE YOU GENERATE FURTHER ANALYSIS OF THE PATIENT'S SITUATION BASED ON CONTEXT AND PATIENT_DATA",
+    "reasoning": "THIS IS WHERE YOU GENERATE REASONING TO YOUR THOUGHTS/ANALYSIS",
+    "answer": [
+      "BULLET 1 OF AFTER GENERATING EVERYTHING ELSE, YOUR ANSWER GOES HERE.",
+      "BULLET 2 OF AFTER GENERATING EVERYTHING ELSE, YOUR ANSWER GOES HERE."
+    ]
+  }
+}

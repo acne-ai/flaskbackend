@@ -7,6 +7,7 @@ import torch
 from torchvision import transforms
 from PIL import Image
 import json
+import os
 
 app = Flask(__name__)
 
@@ -19,6 +20,8 @@ client = OpenAI()
 #prompt paths
 file_path1 = "/home/acneai/flaskbackend/prompt_preface.txt"
 file_path2 = "/home/acneai/flaskbackend/prompt_body.txt"
+#file_path1 = "prompt_preface.txt"
+#file_path2 = "prompt_body.txt"
 #file_path1 = "prompt_preface.txt"
 #file_path2 = "prompt_body.txt"
 

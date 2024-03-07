@@ -1,11 +1,7 @@
 venv/
 __pycache__/
 uploads/
-<<<<<<< HEAD
 processed/
 .env
 **.ipynb
-=======
-.env
-processed/
->>>>>>> frontend_integration
+.DS_Store

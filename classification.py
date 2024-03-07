@@ -22,7 +22,7 @@ version = project.version(3)
 dataset = version.download("folder")
 dinov2_vits14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14')
 class DinoVisionTransformerClassifier(torch.nn.Module):
-    def __init__(self,num_classes=10):
+    def __init__(self):
         super(DinoVisionTransformerClassifier, self).__init__()
         self.transformer = dinov2_vits14
         self.classifier = torch.nn.Sequential(

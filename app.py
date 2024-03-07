@@ -1,7 +1,11 @@
-from flask import Flask, request, render_template, send_file, jsonify
+from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS
 from datetime import datetime
 from openai import OpenAI
+from classification import Utils, DinoVisionTransformerClassifier
+import torch
+from torchvision import transforms
+from PIL import Image
 import json
 
 app = Flask(__name__)
@@ -13,8 +17,10 @@ CORS(app)
 client = OpenAI()
 
 #prompt paths
-file_path1 = "prompt_preface.txt"
-file_path2 = "prompt_body.txt"
+file_path1 = "/home/acneai/flaskbackend/prompt_preface.txt"
+file_path2 = "/home/acneai/flaskbackend/prompt_body.txt"
+#file_path1 = "prompt_preface.txt"
+#file_path2 = "prompt_body.txt"
 
 #function to generate filenames based on timestamp
 def generate_filename():
@@ -42,11 +48,27 @@ def upload_image():
     #image_path = f"/uploads/{generate_filename()}"
     image.save(image_path)
 
-    #INSERT MACHINE LEARNING HERE
-    acne_type = "papulosapustulosa"
 
-    #OPEN AI INTGRATION
-    #Read content from the first file
+    # MACHINE LEARNING HERE...
+    
+    # Load the trained model
+    utils = Utils()
+    model = DinoVisionTransformerClassifier()
+    model.load_state_dict(torch.load("classification_1.pth", map_location=torch.device('cpu')))
+    model.to(utils.device)
+    model.eval() # Set the model to evaluation mode
+    
+    img = utils.transform_image(Image.open(image_path).convert('RGB')).unsqueeze(0).to(utils.device)
+    output = model(img)
+    _, pred = torch.max(output, 1)
+    # print("*************", pred.item(), "*************")
+    
+    acne_types = ["comedonica", "conglobata", "papulopustulosa"]
+    acne_type = acne_types[pred.item()]
+    
+
+    # OPEN AI INTGRATION
+    # Read content from the first file
     with open(file_path1, "r") as file1:
         content1 = file1.read()
     # Read content from the second file
@@ -73,7 +95,27 @@ def upload_image():
         if json_start_index != -1:
             cleaned_data = cleaned_data[json_start_index:]
         json_data = json.loads(cleaned_data)
+    
+    json_data["classification"] = acne_type
+    json_data["result_path"] = image_path.replace('/uploads/', '/processed/')
 
     print(json_data)
 
     return json_data
+
+
+@app.route('/api/get_image', methods=['GET'])
+def get_image():
+    # Get the file path from the request parameters
+    file_path = request.args.get('file_path')
+
+    # Check if file_path is None
+    if file_path is None:
+        return "Error: File path is missing in the request", 400
+
+    try:
+        # Use Flask's send_file function to send the image file
+        return send_file(file_path)
+    except Exception as e:
+        # Handle any potential exceptions, e.g., file not found
+        return f"Error: {str(e)}", 404
